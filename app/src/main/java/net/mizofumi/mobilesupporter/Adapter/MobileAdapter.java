@@ -109,12 +109,6 @@ public class MobileAdapter extends RecyclerView.Adapter<MobileAdapter.ViewHolder
                                         }
                                     });
                                 }
-
-                                @Override
-                                public void error(Exception e) {
-                                    holder.loadingProgress.setVisibility(View.GONE);
-                                    holder.loadingMessage.setText("画像取得失敗...");
-                                }
                             }).download(context);
 
                         }

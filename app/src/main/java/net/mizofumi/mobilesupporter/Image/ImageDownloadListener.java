@@ -9,5 +9,4 @@ import java.io.InputStream;
  */
 public interface ImageDownloadListener{
     void onPostExec(Bitmap bitmap);
-    void error(Exception e);
 }

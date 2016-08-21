@@ -8,6 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.nifty.cloud.mb.core.FindCallback;
 import com.nifty.cloud.mb.core.NCMBException;
@@ -59,15 +60,19 @@ public class AllFragment extends Fragment {
         query.findInBackground(new FindCallback<NCMBObject>() {
             @Override
             public void done(List<NCMBObject> list, NCMBException e) {
-                for (NCMBObject object : list) {
-                    Mobile mobile = new Mobile();
-                    mobile.setObjectId(object.getObjectId());
-                    mobile.setCreateDate(object.getCreateDate());
-                    mobile.setUpdateDate(object.getUpdateDate());
-                    mobile.setName(object.getString("name"));
-                    mobile.setModel(object.getString("model"));
-                    mobile.setType(object.getString("type"));
-                    adapter.addMobile(mobile);
+                if (e == null){
+                    for (NCMBObject object : list) {
+                        Mobile mobile = new Mobile();
+                        mobile.setObjectId(object.getObjectId());
+                        mobile.setCreateDate(object.getCreateDate());
+                        mobile.setUpdateDate(object.getUpdateDate());
+                        mobile.setName(object.getString("name"));
+                        mobile.setModel(object.getString("model"));
+                        mobile.setType(object.getString("type"));
+                        adapter.addMobile(mobile);
+                    }
+                }else {
+                    Toast.makeText(getContext(),"データの取得に失敗しました。",Toast.LENGTH_SHORT).show();
                 }
             }
         });

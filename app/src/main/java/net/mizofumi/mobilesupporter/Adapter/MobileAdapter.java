@@ -10,6 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nifty.cloud.mb.core.DoneCallback;
+import com.nifty.cloud.mb.core.NCMB;
+import com.nifty.cloud.mb.core.NCMBAcl;
+import com.nifty.cloud.mb.core.NCMBException;
+import com.nifty.cloud.mb.core.NCMBFile;
 
 import net.mizofumi.mobilesupporter.Image.GoogleImageSearch;
 import net.mizofumi.mobilesupporter.Image.GoogleImageSearchListener;
@@ -18,6 +25,7 @@ import net.mizofumi.mobilesupporter.Image.ImageDownloadListener;
 import net.mizofumi.mobilesupporter.Mobile;
 import net.mizofumi.mobilesupporter.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -76,6 +84,19 @@ public class MobileAdapter extends RecyclerView.Adapter<MobileAdapter.ViewHolder
                     @Override
                     public void onPostExec(Bitmap bitmap) {
                         holder.imageView.setImageBitmap(bitmap);
+
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+                        byte[] bytes = byteArrayOutputStream.toByteArray();
+                        NCMBFile ncmbFile = new NCMBFile(imageUrl,bytes,new NCMBAcl());
+                        ncmbFile.saveInBackground(new DoneCallback() {
+                            @Override
+                            public void done(NCMBException e) {
+                                if (e == null){
+                                    Toast.makeText(context,"MBaas Uploaded",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
 
                     @Override

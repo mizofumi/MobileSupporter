@@ -69,6 +69,8 @@ public class AllFragment extends Fragment {
                         mobile.setName(object.getString("name"));
                         mobile.setModel(object.getString("model"));
                         mobile.setType(object.getString("type"));
+                        mobile.setSim(object.getString("sim"));
+                        mobile.setReleaseDate(object.getDate("releaseDate"));
                         adapter.addMobile(mobile);
                     }
                 }else {

@@ -17,6 +17,8 @@ public class Mobile {
     String name;
     String model;
     String type;
+    String sim;
+    Date releaseDate;
 
     public String getObjectId() {
         return objectId;
@@ -72,5 +74,21 @@ public class Mobile {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSim() {
+        return sim;
+    }
+
+    public void setSim(String sim) {
+        this.sim = sim;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

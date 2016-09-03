@@ -18,14 +18,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nifty.cloud.mb.core.DoneCallback;
+import com.nifty.cloud.mb.core.FindCallback;
 import com.nifty.cloud.mb.core.NCMB;
+import com.nifty.cloud.mb.core.NCMBException;
+import com.nifty.cloud.mb.core.NCMBFile;
+import com.nifty.cloud.mb.core.NCMBQuery;
 
 import net.mizofumi.mobilesupporter.Tabs.AllFragment;
 import net.mizofumi.mobilesupporter.Tabs.OldPokeWiFiFragment;
 import net.mizofumi.mobilesupporter.Tabs.Type1Fragment;
 import net.mizofumi.mobilesupporter.Tabs.Type2Fragment;
 import net.mizofumi.mobilesupporter.Tabs.Type3Fragment;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -95,6 +103,33 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == R.id.action_all_image_delete){
+            NCMBQuery<NCMBFile> files = NCMBFile.getQuery();
+            files.findInBackground(new FindCallback<NCMBFile>() {
+                boolean error = false;
+                @Override
+                public void done(List<NCMBFile> list, NCMBException e) {
+                    if (e == null){
+                        for (NCMBFile file:list) {
+                            file.deleteInBackground(new DoneCallback() {
+                                @Override
+                                public void done(NCMBException e) {
+                                    if (e != null){
+                                        error = true;
+                                    }
+                                }
+                            });
+                        }
+                        if (!error){
+                            Toast.makeText(MainActivity.this,"すべて削除しました",Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(MainActivity.this,"一部削除できませんでした",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
         }
 
         return super.onOptionsItemSelected(item);

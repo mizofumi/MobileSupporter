@@ -71,13 +71,17 @@ public class MobileAdapter extends RecyclerView.Adapter<MobileAdapter.ViewHolder
         holder.model.setText(list.get(position).getModel());
         holder.type.setText(list.get(position).getType());
 
-        NCMBFile ncmbFile = new NCMBFile(list.get(position).getModel()+".png");
+        holder.imageView.setImageBitmap(null);
+        holder.imageView.setTag(list.get(position).getModel());
+
+        NCMBFile ncmbFile = new NCMBFile(list.get(position).getModel().replace(" ","").replace("　","")+".png");
         ncmbFile.fetchInBackground(new FetchFileCallback() {
             @Override
             public void done(byte[] bytes, NCMBException e) {
                 if (e == null) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    holder.imageView.setImageBitmap(bitmap);
+                    if (holder.imageView.getTag().equals(list.get(position).getModel()))
+                        holder.imageView.setImageBitmap(bitmap);
                     Log.d("MobileAdapter","From MBaas:"+list.get(position).getModel());
                 } else {
                     Log.d("MobileAdapter","From Google:"+list.get(position).getModel());
@@ -95,10 +99,12 @@ public class MobileAdapter extends RecyclerView.Adapter<MobileAdapter.ViewHolder
 
                                 @Override
                                 public void onPostExec(Bitmap bitmap) {
-                                    holder.imageView.setImageBitmap(bitmap);
+
+                                    if (holder.imageView.getTag().equals(list.get(position).getModel()))
+                                        holder.imageView.setImageBitmap(bitmap);
                                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                                    NCMBFile ncmbFile = new NCMBFile(list.get(position).getModel() + ".png", byteArrayOutputStream.toByteArray(), new NCMBAcl());
+                                    NCMBFile ncmbFile = new NCMBFile(list.get(position).getModel().replace(" ","").replace("　","") + ".png", byteArrayOutputStream.toByteArray(), new NCMBAcl());
                                     ncmbFile.saveInBackground(new DoneCallback() {
                                         @Override
                                         public void done(NCMBException e) {

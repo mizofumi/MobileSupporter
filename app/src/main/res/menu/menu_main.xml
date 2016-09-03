@@ -7,4 +7,8 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_all_image_delete"
+        android:title="Mbaas上の画像を全クリア" />
 </menu>
